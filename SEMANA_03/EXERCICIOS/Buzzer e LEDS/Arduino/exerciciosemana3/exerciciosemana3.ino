@@ -45,18 +45,26 @@ void acendeLed(int convertido){
 void loop() {
   if(digitalRead(button1) == 0){
     int lux = leitura();
-    som(lux);
     acendeLed(lux);
+    som(lux);
+    for (int i = 0; i < 4; i++){
+    digitalWrite(leds[i], LOW);
+    }
   }
   if(digitalRead(button2) == 0){
     for (int i = 0; i <= aux; i++)
     {
-      som(armazenar[i]);
       acendeLed(armazenar[i]);
+      som(armazenar[i]);
       Serial.println(armazenar[i]);
-      delay(1000);
+      for (int i = 0; i < 4; i++){
+      digitalWrite(leds[i], LOW);
+      }
+      delay(500);
     }
-    armazenar[50] = {};
+    for (int i = aux; i <= 0; i--){
+      armazenar[i] = 0;
+    }
     aux = 0;
   }
 }
