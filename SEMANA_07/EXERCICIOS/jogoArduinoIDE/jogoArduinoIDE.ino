@@ -2,12 +2,12 @@
 #include <WebServer.h>
 
 /*Colocar nome e senha do wifi*/
-const char* ssid = "FAMILIA_MEIRA-2G";  // Inserir Nome aqui
-const char* password = "34767550";  //Inserir senha aqui
+const char* ssid = "Inteli-COLLEGE";  // Inserir Nome aqui
+const char* password = "QazWsx@123";  //Inserir senha aqui
 // Definição dos pinos dos leds, do buzzer e de uma variavel auxiliar
 int buzzer = 41;
 int ledG = 19;
-int ledp1 = 20;
+int ledp1 = 9;
 int ledp2 = 21;
 int ledpE = 42;
 int aux = 0;
@@ -40,9 +40,6 @@ void setup() {
   server.on("/winone", winOne);
   server.on("/wintwo", winTwo);
   server.on("/empate", empate);
-  server.on("/game", gameP);
-  server.on("/nog", nogameP);
-  server.on("/resgame", resetgame);
   server.begin();
   Serial.println("Servidor HTTP iniciado");
 
@@ -100,32 +97,6 @@ void empate(){
   delay(1500);
   digitalWrite(ledpE, LOW);
   delay(10);
-}
-
-// Função de quando o jogo está em andamento
-void gameP(){
-  if(aux == 0){
-    digitalWrite(ledG, HIGH);
-    tone(buzzer,330,300);
-    tone(buzzer,349,300);
-    tone(buzzer,392,200);
-    delay(2000);
-    digitalWrite(ledG, LOW);
-  }
-  delay(10);
-}
-
-// Função de quando o jogo não está em andamento
-void nogameP(){
-  digitalWrite(ledG, LOW);
-  noTone(buzzer);
-  delay(10);
-  aux = 1;
-}
-
-// Função de quando o jogo é resetado
-void resetgame(){
-  aux = 0;
 }
 
 // Função que escreve o html em uma string e retorna ele
@@ -247,9 +218,6 @@ String SendHTML(){
   ptr +="playerCount = Player.allInstances.length;\n";
   ptr +="function draw() {\n";
   ptr +="if (Player.allInstances.filter((p) => !p.key).length === 0) {\n";
-  ptr +="var grm = new XMLHttpRequest();\n";
-  ptr +="grm.open(\"GET\", \"/game\", true);\n";
-  ptr +="grm.send();\n";
   ptr +="if (playerCount === 1) {\n";
   ptr +="const alivePlayers = Player.allInstances.filter((p) => p.dead === false);\n";
   ptr +="outcome = `Jogador ${alivePlayers[0]._id} venceu!!!`;\n";
@@ -302,9 +270,6 @@ String SendHTML(){
   ptr +="}\n";
   ptr +="let game = setInterval(draw, 100);\n";
   ptr +="function createResultsScreen(color) {\n";
-  ptr +="var crg = new XMLHttpRequest();\n";
-  ptr +="crg.open(\"GET\", \"/nog\", true);\n";
-  ptr +="crg.send();\n";
   ptr +="const resultNode = document.createElement(\"div\");\n";
   ptr +="resultNode.id = \"result\";\n";
   ptr +="resultNode.style.color = color || \"#fff\";\n";
@@ -339,9 +304,6 @@ String SendHTML(){
   ptr +="});\n";
   ptr +="}\n";
   ptr +="function resetGame() {\n";
-  ptr +="var reg = new XMLHttpRequest();\n";
-  ptr +="reg.open(\"GET\", \"/resgame\", true);\n";
-  ptr +="reg.send();\n";
   ptr +="const result = document.getElementById(\"result\");\n";
   ptr +="if (result) result.remove();\n";
   ptr +="context.clearRect(0, 0, canvas.width, canvas.height);\n";
